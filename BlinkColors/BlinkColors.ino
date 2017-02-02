@@ -1,12 +1,10 @@
-#include <WS2812.h>
-#include <cRGB.h>
+#include <LEDColors.h>
 
 #define outputPin 9  // Digital output pin (default: 9)
 #define LEDCount 60   // Number of LEDs to drive (default: 9)
 
 //List of LED's
-WS2812 LED(LEDCount); 
-cRGB value;
+WS2812 LED(LEDCount);
 
 void setup()
 {
@@ -16,42 +14,24 @@ void setup()
 
 void loop() 
 {
-  int delayValue = 100;  
-  int i;
-  
-  ChangeRGB(0,0,255);
-  for(i = 0; i < LEDCount; i++)
-  {
-      LED.set_crgb_at(i, value);
-  }
-
-  LED.sync(); // Sends the data to the LEDs
-  delay(delayValue); // Wait (ms)
-  
-  ChangeRGB(0,255,0);
-  for(i = 0; i < LEDCount; i++)
-  {
-      LED.set_crgb_at(i, value);
-  }
-
-  LED.sync(); // Sends the data to the LEDs
-  delay(delayValue); // Wait (ms)
-  
-  ChangeRGB(255,0,0);
-  for(i = 0; i < LEDCount; i++)
-  {
-      LED.set_crgb_at(i, value);
-  }
-
-  LED.sync(); // Sends the data to the LEDs
-  delay(delayValue); // Wait (ms)
+  RotateColor(White());
+  RotateColor(Red());
+  RotateColor(Green());
+  RotateColor(Blue());
+  RotateColor(Gray());
+  RotateColor(Yellow());
+  RotateColor(Cyan());
+  RotateColor(Magenta());
+  RotateColor(RandomColor());
 }
 
-void ChangeRGB(int r,int g,int b)
+void RotateColor(cRGB value)
 {
-  value.r = r;
-  value.g = g;
-  value.b = b;
+  int i;
+  for(i = 0; i < LEDCount; i++)
+  {
+      LED.set_crgb_at(i, value);
+  }
+  LED.sync(); // Sends the data to the LEDs
+  delay(1000); // Wait (ms)
 }
-
-
