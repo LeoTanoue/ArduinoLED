@@ -8,6 +8,11 @@
 
 WS2812 LED[LEDStripCount] = { WS2812(LEDCount), WS2812(LEDCount), WS2812(LEDCount), WS2812(LEDCount) };
 
+int h = 0;   //stores 0 to 614
+byte steps = 15; //number of hues we skip in a 360 range per update
+byte sat = 255;
+byte val = 127;
+
 void setup()
 {
   delay(2000);
@@ -20,8 +25,18 @@ void setup()
 
 void loop()
 {  
-  Ping();
-  Pong();
+  HueChange();
+}
+
+void HueChange()
+{
+  Cycle();
+  for(int i = 0; i < LEDCount; i++)
+  {
+    SetColorAtIndex(i,value);
+  }
+  Sync();
+  delay(delayValue);
 }
 
 void Clear()
@@ -29,50 +44,19 @@ void Clear()
   cRGB value = Blank();
   for(int i = 0; i < LEDCount; i++)
   {
-    SetColorAtIndex(i,value);
+    setColorAtIndex(i,value);
   }    
   Sync();
 }
 
-void Ping()
+void Cycle()
 {
-  cRGB value = RandomColor();
-  for(int i = 0; i <= LEDCount; i++)
+  value.SetHSV(h, sat, val);
+  
+  h += steps;  
+  if(h > 360)
   {
-    for(int b = 0; b < ballSize; b++)
-    {
-      SetColorAtIndex(i+b,value);
-    }
-    if(i > ballSize-1)
-    {
-      for(int c = ballSize; c > 0; c--)
-      {
-        SetColorAtIndex(i-c,Blank());
-      }
-    }
-    Sync();
-    delay(delayValue);
-  }
-}
-
-void Pong()
-{
-  cRGB value = RandomColor();
-  for(int i = LEDCount; i > 0; i--)
-  {
-    for(int b = 0; b < ballSize; b++)
-    {
-      SetColorAtIndex(i-b,value);
-    }
-    if(i < (LEDCount - ballSize))
-    {
-      for(int c = ballSize; c > 0; c--)
-      {
-        SetColorAtIndex(i+c,Blank());
-      }
-    }
-    Sync();
-    delay(delayValue);
+      h %= 360;
   }
 }
 
