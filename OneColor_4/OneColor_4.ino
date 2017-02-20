@@ -26,18 +26,11 @@ void setup()
 
 void loop()
 {  
-  HueChange();
-}
-
-void HueChange()
-{
-  Cycle();
   for(int i = 0; i < LEDCount; i++)
   {
-    SetColorAtIndex(i,value);
-  }
+    SetColorAtIndex(i,Red());
+  }    
   Sync();
-  delay(delayValue);
 }
 
 void Clear()
@@ -48,17 +41,6 @@ void Clear()
     SetColorAtIndex(i,value);
   }    
   Sync();
-}
-
-void Cycle()
-{
-  value.SetHSV(h, sat, val);
-  
-  h += steps;  
-  if(h > 360)
-  {
-      h %= 360;
-  }
 }
 
 void SetColorAtIndex(int index, cRGB value)
