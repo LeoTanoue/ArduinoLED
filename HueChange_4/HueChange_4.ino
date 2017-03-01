@@ -1,9 +1,11 @@
+
+#define USE_HSV
 #include <LEDColors.h>
 
 #define outputPin 9    // Digital output pin (default: 9)
 #define LEDCount 60    // Number of LEDs to drive (default: 9)
 #define ballSize 5     // LED cluster size
-#define delayValue 10  // Delay value in milliseconds
+#define delayValue 50  // Delay value in milliseconds
 #define LEDStripCount 4 //LED Strip Count
 
 WS2812 LED[LEDStripCount] = { WS2812(LEDCount), WS2812(LEDCount), WS2812(LEDCount), WS2812(LEDCount) };
