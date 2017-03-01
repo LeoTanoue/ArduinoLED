@@ -17,6 +17,11 @@ void setup()
 
 void loop() 
 {
+  TraverseColors();
+}
+
+void TraverseColors(
+{
   Traverse(White());
   Traverse(Red());
   Traverse(Green());

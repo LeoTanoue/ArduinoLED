@@ -1,4 +1,3 @@
-
 #define USE_HSV
 #include <LEDColors.h>
 
