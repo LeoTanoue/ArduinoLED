@@ -63,3 +63,30 @@ cRGB RandomColor()
 {
   return GetColor(getRandomColors(),getRandomColors(),getRandomColors());
 }
+
+cRGB BaseColor()
+{
+  switch(rand() % 6 + 1)
+  {
+    case 1:
+      return Red();
+      break;
+    case 2:
+      return Green();
+      break;
+    case 3:
+      return Blue();
+      break;
+    case 4:
+      return Yellow();
+      break;
+    case 5:
+      return Cyan();
+      break;
+    case 6:
+      return Magenta();
+      break;
+    default:
+      return Blue();
+  }
+}

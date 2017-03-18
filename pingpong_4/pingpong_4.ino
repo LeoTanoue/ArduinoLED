@@ -37,7 +37,7 @@ void Clear()
 void Ping()
 {
   cRGB value = RandomColor();
-  for(int i = 0; i <= LEDCount; i++)
+  for(int i = 0; i < LEDCount; i++)
   {
     for(int b = 0; b < ballSize; b++)
     {
