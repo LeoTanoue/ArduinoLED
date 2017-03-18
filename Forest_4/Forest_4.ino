@@ -6,7 +6,7 @@
 #define ballSize 5     // LED cluster size
 #define LEDStripCount 4 //LED Strip Count
 int delayValue = 10;  // Delay value in milliseconds
-int cycles[3] = { 15, 15, 50};
+int cycles[3] = { 15, 5, 100};
 WS2812 LED[LEDStripCount] = { WS2812(LEDCount), WS2812(LEDCount), WS2812(LEDCount), WS2812(LEDCount) };
 int h = 0;   //stores 0 to 614
 byte steps = 15; //number of hues we skip in a 360 range per update
@@ -21,11 +21,12 @@ void setup()
   {
     LED[i].setOutput(outputPin);
   }
-  Clear();
 }
 
 void loop()
 {  
+  Clear();
+  //Ping Pong Start
   delayValue = 10;
   int i;
   for(i = 0; i < cycles[0]; i++)
@@ -33,12 +34,14 @@ void loop()
     Ping();
     Pong();
   }
-  delayValue = 20;
+  //Traverse Start
+  delayValue = 15;
   for(i = 0; i < cycles[1]; i++)
   {
     TraverseColors();
   }
-  delayValue = 50;
+  //Hue Change Start
+  delayValue = 85;
   for(int i = 0; i < cycles[2]; i++)
   {
     HueChange();
@@ -125,11 +128,9 @@ void Traverse(cRGB value)
 
 void TraverseColors()
 {
-  Traverse(White());
   Traverse(Red());
   Traverse(Green());
   Traverse(Blue());
-  Traverse(Gray());
   Traverse(Yellow());
   Traverse(Cyan());
   Traverse(Magenta());
