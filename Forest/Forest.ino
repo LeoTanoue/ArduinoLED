@@ -179,7 +179,6 @@ void DotsDownBackwards()
   }
 }
 
-
 void Ping()
 {
   cRGB value = BaseColor();
