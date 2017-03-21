@@ -44,6 +44,7 @@ void loop()
   Clear();
   Dots();
   //Slow Traverse
+  Clear();
   delayValue = 8;
   for(int i = 0; i < cycles[2]; i++)
   {
@@ -67,18 +68,18 @@ void Clear()
   Sync();
 }
 
-
 void SlowTraverse(int forward, int backwards, cRGB color)
 {
   int i = forward;
   int j = 0;
-  while(i < 60)
+  while(i < LEDCount)
   {
     LightUp(j,i,color);
     FadeDown(i,j+backwards);
     i = i + forward;
     j = j + backwards;
   }
+  LightUp(j,LEDCount,color);
 }
 
 void LightUp(int startIndex, int endIndex, cRGB value)

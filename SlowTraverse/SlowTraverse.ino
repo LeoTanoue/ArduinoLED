@@ -25,13 +25,14 @@ void SlowTraverse(int forward, int backwards, cRGB color)
 {
   int i = forward;
   int j = 0;
-  while(i < 60)
+  while(i < LEDCount)
   {
     LightUp(j,i,color);
     FadeDown(i,j+backwards);
     i = i + forward;
     j = j + backwards;
   }
+  LightUp(j,LEDCount,Blue());
 }
 
 void LightUp(int startIndex, int endIndex, cRGB value)

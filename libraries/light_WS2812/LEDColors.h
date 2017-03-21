@@ -54,6 +54,16 @@ cRGB Magenta()
   return GetColor(255,0,255);
 }
 
+cRGB Orange()
+{
+  return GetColor(255,165,0);
+}
+
+cRGB Purple()
+{
+  return GetColor(128,0,128);
+}
+
 int getRandomColors()
 {
   return rand() % 256 + 1;
@@ -66,7 +76,7 @@ cRGB RandomColor()
 
 cRGB BaseColor()
 {
-  switch(rand() % 6 + 1)
+  switch(rand() % 8 + 1)
   {
     case 1:
       return Red();
@@ -86,6 +96,10 @@ cRGB BaseColor()
     case 6:
       return Magenta();
       break;
+    case 7:
+      return Orange();
+    case 8:
+      return Purple();
     default:
       return Blue();
   }
