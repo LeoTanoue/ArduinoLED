@@ -36,43 +36,33 @@ void Clear()
 
 void Ping()
 {
-  cRGB value = RandomColor();
-  for(int i = 0; i < LEDCount; i++)
+  cRGB value = BaseColor();
+  int i = 0;
+  while(i <= LEDCount)
   {
-    for(int b = 0; b < ballSize; b++)
+    SetColorAtIndex(i,value);
+    if(i >= ballSize)
     {
-      SetColorAtIndex(i+b,value);
-    }
-    if(i > ballSize-1)
-    {
-      for(int c = ballSize; c > 0; c--)
-      {
-        SetColorAtIndex(i-c,Blank());
-      }
+      SetColorAtIndex(i-ballSize,Blank());
     }
     Sync();
     delay(delayValue);
+    
+    i++;
   }
 }
 
 void Pong()
 {
-  cRGB value = RandomColor();
-  for(int i = LEDCount; i > 0; i--)
+  cRGB value = BaseColor();
+  int i = LEDCount;
+  while((i-ballSize) >= 0)
   {
-    for(int b = 0; b < ballSize; b++)
-    {
-      SetColorAtIndex(i-b,value);
-    }
-    if(i < (LEDCount - ballSize))
-    {
-      for(int c = ballSize; c > 0; c--)
-      {
-        SetColorAtIndex(i+c,Blank());
-      }
-    }
+    SetColorAtIndex(i-ballSize,value);
+    SetColorAtIndex(i,Blank());
     Sync();
     delay(delayValue);
+    i--;
   }
 }
 

@@ -1,22 +1,20 @@
 #define USE_HSV
 #include <LEDColors.h>
 
-#define outputPin 9    // Digital output pin (default: 9)
-#define LEDCount 60    // Number of LEDs to drive (default: 9)
+#define outputPin 13    // Digital output pin
+#define LEDCount 60    // Number of LEDs to drive
 #define ballSize 5     // LED cluster size
 #define LEDStripCount 4 //LED Strip Count
 int delayValue = 10;  // Delay value in milliseconds
-int cycles[4] = { 10, 5, 5, 100};
-WS2812 LED[LEDStripCount] = { WS2812(LEDCount), WS2812(LEDCount), WS2812(LEDCount), WS2812(LEDCount) };
-int h = 0;   //stores 0 to 614
-byte steps = 15; //number of hues we skip in a 360 range per update
-byte sat = 255;
-byte val = 127;
-cRGB hvalue;
+int cycles[4] = { 10, 5, 5, 100}; //Different shapes need to run different amounts of cycles
+WS2812 LED[LEDStripCount] = { WS2812(LEDCount), WS2812(LEDCount), WS2812(LEDCount), WS2812(LEDCount) }; //Array to hold LED Strips
+int hue = 0;   //stores 0 to 614
+cRGB hueColor;   //cRGB to hold color of Hue Change
 
 void setup()
 {
   delay(2000);
+  //Sets up all LED Strips to the output (Data) pin
   for(int i=0;i<LEDStripCount;i++)
   {
     LED[i].setOutput(outputPin);
@@ -58,15 +56,39 @@ void loop()
   }
 }
 
+/***** Base Functions *****/
+
+void SetColorAtIndex(int index, cRGB color)
+{
+  for(int i=0;i<LEDStripCount;i++)
+  {
+    LED[i].set_crgb_at(index,color);
+  }
+}
+
+void SetColorAtIndexIndividual(int index, cRGB color,int LEDIndex)
+{
+  LED[LEDIndex].set_crgb_at(index,color);
+}
+
+void Sync()
+{
+  for(int i=0;i<LEDStripCount;i++)
+  {
+    LED[i].sync();
+  }
+}
+
 void Clear()
 {
-  cRGB value = Blank();
   for(int i = 0; i < LEDCount; i++)
   {
-    SetColorAtIndex(i,value);
+    SetColorAtIndex(i,Blank());
   }    
   Sync();
 }
+
+/***** Slow Traverse *****/
 
 void SlowTraverse(int forward, int backwards, cRGB color)
 {
@@ -82,11 +104,11 @@ void SlowTraverse(int forward, int backwards, cRGB color)
   LightUp(j,LEDCount,color);
 }
 
-void LightUp(int startIndex, int endIndex, cRGB value)
+void LightUp(int startIndex, int endIndex, cRGB color)
 {
   for(int i = startIndex; i <= endIndex; i++)
   {
-    SetColorAtIndex(i,value);
+    SetColorAtIndex(i,color);
     Sync();
     delay(delayValue);
   }
@@ -101,6 +123,8 @@ void FadeDown(int startIndex, int endIndex)
     delay(delayValue);
   }
 }
+
+/***** Dots *****/
 
 void Dots()
 {
@@ -180,14 +204,16 @@ void DotsDownBackwards()
   }
 }
 
+/***** Ping Pong *****/
+
 void Ping()
 {
-  cRGB value = BaseColor();
+  cRGB color = BaseColor();
   for(int i = 0; i < LEDCount; i++)
   {
     for(int b = 0; b < ballSize; b++)
     {
-      SetColorAtIndex(i+b,value);
+      SetColorAtIndex(i+b,color);
     }
     if(i > ballSize-1)
     {
@@ -203,12 +229,12 @@ void Ping()
 
 void Pong()
 {
-  cRGB value = BaseColor();
+  cRGB color = BaseColor();
   for(int i = LEDCount; i > 0; i--)
   {
     for(int b = 0; b < ballSize; b++)
     {
-      SetColorAtIndex(i-b,value);
+      SetColorAtIndex(i-b,color);
     }
     if(i < (LEDCount - ballSize))
     {
@@ -222,32 +248,14 @@ void Pong()
   }
 }
 
-void SetColorAtIndex(int index, cRGB value)
-{
-  for(int i=0;i<LEDStripCount;i++)
-  {
-    LED[i].set_crgb_at(index,value);
-  }
-}
 
-void SetColorAtIndexIndividual(int index, cRGB value,int LEDIndex)
-{
-  LED[LEDIndex].set_crgb_at(index,value);
-}
+/***** Traverse *****/
 
-void Sync()
-{
-  for(int i=0;i<LEDStripCount;i++)
-  {
-    LED[i].sync();
-  }
-}
-
-void Traverse(cRGB value)
+void Traverse(cRGB color)
 {
   for(int i = 0; i < LEDCount; i++)
   {
-    SetColorAtIndex(i,value);
+    SetColorAtIndex(i,color);
     Sync();
     delay(delayValue);
   }
@@ -264,12 +272,14 @@ void TraverseColors()
   Traverse(RandomColor());
 }
 
+/***** Hue Change *****/
+
 void HueChange()
 {
   Cycle();
   for(int i = 0; i < LEDCount; i++)
   {
-    SetColorAtIndex(i,hvalue);
+    SetColorAtIndex(i,hueColor);
   }
   Sync();
   delay(delayValue);
@@ -277,11 +287,14 @@ void HueChange()
 
 void Cycle()
 {
-  hvalue.SetHSV(h, sat, val);
+  byte steps = 15; //number of hues we skip in a 360 range per update
   
-  h += steps;  
-  if(h > 360)
+  //Hue, Saturation and Value (Brightness)
+  hueColor.SetHSV(hue, 255, 127);
+  
+  hue += steps;
+  if(hue > 360)
   {
-      h %= 360;
+      hue %= 360;
   }
 }
